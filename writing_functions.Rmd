@@ -1,0 +1,169 @@
+---
+title: "writing_functions"
+output: github_document
+date: "2025-10-23"
+---
+
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+
+```{r}
+library(tidyverse)
+library(rvest)
+
+set.seed(1)
+
+```
+
+## Start Small
+The best way to build up a function is to start with code you’ve written outside a function. 
+Simple example: the chunk below takes a sample from a normal distribution and then computes the vector of Z scores for the sample.
+
+```{r}
+x_vec = rnorm(20, mean = 10, sd = 3.5)
+
+#computing z scores
+(x_vec - mean(x_vec)) / sd(x_vec)
+```
+
+Write a function to compute z scores
+
+```{r}
+#x is a list of numbers
+z_scores = function(x) {
+ 
+   z = (x - mean(x)) / sd(x) #compute for x and then call it z
+  
+   z #often the last line of the function is the output 
+}
+
+#z is not being created and stored in the environment. it only exists within this function and when this function is running. 
+```
+
+
+Let's try our function ...
+
+```{r}
+z_scores( x = x_vec)
+
+num_vec = rnorm(123, mean = 14, sd = 0.4)
+
+z_scores(x = num_vec)
+
+```
+
+
+Let's break our function
+
+```{r, error = TRUE}
+z_scores(3)
+#breaks because you need at least a couple values to calculate SD
+
+z_scores("my name is jeff")
+#breaks becuase you need to use a number to calculate a mean 
+```
+
+
+Update function to let people know when it is breaking...
+```{r}
+z_scores = function(x) {
+ 
+  if (!is.numeric(x)) {
+     stop("The input x should be numeric")
+  }
+  
+  if (length(x) < 5) {
+     stop("only compute scores where x > 5")
+  }
+  
+  z = (x - mean(x)) / sd(x) #compute for x and then call it z
+  
+  z #often the last line of the function is the output 
+}
+```
+
+
+## let's compute some stuff
+What if we want to return multiple values (mean and sd of a numeric vector)
+
+```{r}
+
+mean_and_sd = function(x) {
+  
+  if (!is.numeric(x)) {
+    stop("Argument x should be numeric")
+  } 
+  
+  else if (length(x) < 5) {
+    stop("Only compute mean and sd when the input has 5 or more numbers")
+  }
+  
+  mean_x = mean(x, na.rm = TRUE)
+  sd_x = sd(x, na.rm = TRUE)
+
+  c(mean_x, sd_x)
+}
+
+mean_and_sd(x_vec)
+```
+
+A better output format would be a df
+
+```{r}
+mean_and_sd = function(x) {
+  
+  if (!is.numeric(x)) {
+    stop("Argument x should be numeric")
+  } 
+  
+  else if (length(x) < 5) {
+    stop("Only compute mean and sd when the input has 5 or more numbers")
+  }
+  
+  mean_x = mean(x, na.rm = TRUE)
+  sd_x = sd(x, na.rm = TRUE)
+
+  tibble(
+  mean = mean_x, 
+       sd = sd_x
+  )
+  
+}
+
+mean_and_sd(x_vec)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
