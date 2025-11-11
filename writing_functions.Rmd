@@ -203,26 +203,21 @@ What if i want to createa function that creates this dataframe rather than runni
 
 
 Write a function to do simulations
-
+(Originally we wrote this as code chunk. Now, we moved code to a source file)
 ```{r}
-sim_mean_sd = function(n_subj = 30, mu = 3, sigma = 2) { #these are default values if not defined when you actually run the function
-  
-              sim_df = 
-              tibble(
-                x = rnorm(n = n_subj, mean = mu, sd = sigma)
-              )
-          
-            sim_df |> 
-              summarize(
-                mu_hat = mean(x),
-                sigma_hat = sd(x)
-                )
-  
-}
+#now i import from source folder:
+source("source/sim_mean_sd.R")
 
-#option shift and you pull down
+#source means execute entire file in backgorund
 
 ```
+
+
+```{r}
+sim_mean_sd(n_subj = 30)
+```
+
+
 
 Let's run this function
 
